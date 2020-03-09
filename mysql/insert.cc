@@ -33,7 +33,7 @@ int main()
     // 4. 拼接 SQL 语句
     char sql[1024 * 4] = {0};
     char title[] = "立一个 flag";
-    char content[] = "我要拿30W年薪"；
+    char content[] = "我要拿30W年薪";
     int tag_id = 1;
     char date[] = "2019/08/09";
     sprintf(sql, "insert into blog_table values(null, '%s', '%s', %d, '%s')",
