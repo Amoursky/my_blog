@@ -8,3 +8,4 @@ create table blog_table(
     tag_id int,
     create_time varchar(50),
 );
+
