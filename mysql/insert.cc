@@ -36,8 +36,18 @@ int main()
     char content[] = "我要拿30W年薪"；
     int tag_id = 1;
     char date[] = "2019/08/09";
-    
-
+    sprintf(sql, "insert into blog_table values(null, '%s', '%s', %d, '%s')",
+    title, content, tag_id, date);
+    printf("sql: %s\n",sql);
+    // 5. 让数据库服务器执行 SQL
+    int ret = mysql_query(content_fd, sql);
+    if (ret < 0)
+    {
+        printf("执行 sql 失败！%s\n", mysql_error(connect_fd));
+        mysql_close(connect_fd);
+        return 1;
+    }
+    printf("插入成功！\n");
 
     // 断开链接
     mysql_close(connect_fd);
