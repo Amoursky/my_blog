@@ -26,6 +26,19 @@ int main()
     }
     printf("链接成功！\n");
 
+    // 3. 设置编码方式
+    // mysql server 部分最初安装的时候已经设置成了 utf8
+    // 也要在客户端这边也设称 utf8
+    mysql_set_character_set(connect_fd, "utf8");
+    // 4. 拼接 SQL 语句
+    char sql[1024 * 4] = {0};
+    char title[] = "立一个 flag";
+    char content[] = "我要拿30W年薪"；
+    int tag_id = 1;
+    char date[] = "2019/08/09";
+    
+
+
     // 断开链接
     mysql_close(connect_fd);
     return 0;
