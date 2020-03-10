@@ -1,13 +1,10 @@
-// 通过这个程序使用 MySQL  API 实现数据的插入功能
-
 #include <cstdio>
 #include <cstdlib>
-// 编译器默认从 /usr/include 目录中查找头文件
 #include <mysql/mysql.h>
 
 int main()
 {
-    // 1.创建一个数据库的连接句柄
+     // 1.创建一个数据库的连接句柄
     MYSQL* connect_fd = mysql_init(NULL);
     // 2. 和数据库建立连接（和 TCP 的区分开，这是在应用层建立连接）
     //  连接过程需要指定一些必要的信息
@@ -31,25 +28,32 @@ int main()
     // 也要在客户端这边也设称 utf8
     mysql_set_character_set(connect_fd, "utf8");
     // 4. 拼接 SQL 语句
-    char sql[1024 * 4] = {0};
-    char title[] = "立一个 flag";
-    char content[] = "我要拿30W年薪";
-    int tag_id = 1;
-    char date[] = "2019/08/09";
-    sprintf(sql, "insert into blog_table values(null, '%s', '%s', %d, '%s')",
-    title, content, tag_id, date);
-    printf("sql: %s\n",sql);
-    // 5. 让数据库服务器执行 SQL
+    char sql[1024 * 4] = "select * from blog_table";
+    //5. 执行 SQL 语句
     int ret = mysql_query(connect_fd, sql);
     if (ret < 0)
     {
-        printf("执行 sql 失败！%s\n", mysql_error(connect_fd));
+        printf("mysql_query failed! %s\n",mysql_error(connect_fd));
         mysql_close(connect_fd);
         return 1;
     }
-    printf("插入成功！\n");
-
-    // 断开链接
+    // 6.遍历结果集合， MYSQL_RES select 得到的结果集合
+    MYSQL_RES* result = mysql_store_result(connect_fd);
+    // a) 获取到结果集合中的行数和列数
+    int rows = mysql_num_rows(result);
+    int fields = mysql_num_fields(result);
+    // b)根据行数和列数来遍历结果
+    for (int i = 0; i < rows; ++i)
+    {
+        MYSQL_ROW row = mysql_fetch_row(result);
+        for(int j = 0; j < fields; ++j)
+        {
+            printf("%s\t", row[j]);
+        }
+        printf("\n");
+    }
+    //释放结果集合
+    mysql_free_result(result);
     mysql_close(connect_fd);
     return 0;
 }
