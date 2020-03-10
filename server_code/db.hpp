@@ -100,4 +100,4 @@ namespace blog_system
         private:
     };
     
-} // end blog_system
+} //  end blog_system
