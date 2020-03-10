@@ -75,6 +75,27 @@ namespace blog_system
             {
                 return true;
             }
+        private:
+    };
+
+    class TagTable
+    {
+        public:
+            TagTable(){}
+            bool Insert(const Json::Value& tag)
+            {
+                return true;
+            }
+
+            bool Delete(int32_t tag_id)
+            {
+                return true;
+            }
+
+            bool SelectAll(Json::Value* tags)
+            {
+                return true;
+            }
 
         private:
     };
