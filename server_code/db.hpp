@@ -63,17 +63,17 @@ namespace blog_system
             //blog 同样是输出型参数，根据当前的 blog_id 在数据库中找到具体的博客内通通过blog参数返回给调用者
             bool SelectOne(int32_t blog_id, Json::Value* blog)
             {
-
+                return true;
             }
 
-            bool Update()
+            bool Update(const Json::Value& blog)
             {
-
+                return true;
             }
 
-            bool Delete()
+            bool Delete(int32_t blog_id)
             {
-
+                return true;
             }
 
         private:
