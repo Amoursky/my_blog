@@ -52,4 +52,4 @@ int main()
     // 断开链接
     mysql_close(connect_fd);
     return 0;
-}
+} 
