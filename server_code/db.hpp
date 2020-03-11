@@ -2,6 +2,8 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <cstring>
+#include <memory>
 #include <mysql/mysql.h>
 #include <jsoncpp/json/json.h>
 
@@ -33,7 +35,7 @@ namespace blog_system
     class BlogTable
     {
         public:
-            BlogTable(MYSQL* connect_fd)
+            BlogTable(MYSQL* connect_fd) : mysql_(connect_fd)
             {
                 // 通过这个构造函数获取到一个数据库的操作句柄
             }
@@ -51,12 +53,55 @@ namespace blog_system
             // 最大的好处是方便扩展
             bool Insert(const Json::Value& blog)
             {
+                const std::string& content = blog["content"].asCString();
+                char* to = new char[content.size() * 2 + 1];// 大小是文档的要求
+                std::unique_ptr<char> to(new char[content.size() * 2 + 1]);
+                // 进行转译，防止正文出现单引号等引起的问题
+                mysql_real_escape_string(mysql_, to.get(), content.c_str(), content.size());
+
+                // 核心就是操作 sql 语句
+                std:unique_ptr<char> sql(new char[content.size() * 2 + 4096]);
+                sprintf(sql.get(), "insert into blog_table values(null, '%s'， ‘%s', %d, '%s')",
+                 blog["title"].asCString(), 
+                 to.get(), 
+                 blog["tag_id"].asInt(), 
+                 blog["create_time"].asCString());
+
+                // 执行sql语句
+                int ret = mysql_query(mysql_, sql.get());
+                if (ret != 0)
+                {
+                    printf("执行插入博客失败！ %s\n", mysql_error(mysql_));
+                    return false;
+                }
+                printf("执行插入博客成功！\n");
                 return true;
             }
 
             // blogs 作为一个输出型参数
-            bool SelectAll(Json::Value* blogs, const std::string& tag_id)
+            bool SelectAll(Json::Value* blogs, const std::string& tag_id = "")
             {
+                //查找不需要太长的 sql ，固定成都就行了
+                char sql[1024 * 4] = {0};
+                if (tag_id == "")
+                {
+                    // 此时不需要按照 tag 来筛选结果
+                    sprintf(sql, "select blog_id,title,tag_id,create_time from blog_table");
+                }
+                else
+                {
+                    // 此时需要按 tag 来筛选
+                    sprintf(sql, "select blog_id,title,tag_id,create_time from blog_table where tag_id = %d", std::stoi(tag_id));
+                }
+                int ret = mysql_query(mysql_, sql);
+                if (ret != 0)
+                {
+                    printf("执行查找所有的博客失败！ %s\n",mysql_error(mysql_));
+                }
+                printf("执行查找所有的博客成功！\n");
+                MYSQL_RES* result = mysql_store_result(mysql_);
+                int rows = mysql_num_rows(result);
+                for ()
                 return true;
             }
 
@@ -76,6 +121,7 @@ namespace blog_system
                 return true;
             }
         private:
+            MYSQL* mysql_;
     };
 
     class TagTable
