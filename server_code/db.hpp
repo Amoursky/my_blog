@@ -9,7 +9,7 @@
 
 namespace blog_system
 {
-    static MySQL* MySQLInit()
+    static MYSQL* MySQLInit()
     {
         // 初始化一个MySQL 句柄并建立链接
         // 1. 创建一个句柄
@@ -40,33 +40,24 @@ namespace blog_system
                 // 通过这个构造函数获取到一个数据库的操作句柄
             }
             
-            // 以下操作相关参数都统一使用 JSON 的方式
-            // Json::Value jsoncpp 中最核心的类
-            // Json::Value 就表示一个具体的 json 对象
-            //形如
-            // {
-            //     title:"博客标题",
-            //     content:"博客正文",
-            //     create:"创建时间",
-            //     tag_id:"标签id"
-            // }
-            // 最大的好处是方便扩展
             bool Insert(const Json::Value& blog)
             {
-                const std::string& content = blog["content"].asCString();
+                const std::string &content = blog["content"].asString();
                 //char* to = new char[content.size() * 2 + 1];// 大小是文档的要求
                 std::unique_ptr<char> to(new char[content.size() * 2 + 1]);
                 // 进行转译，防止正文出现单引号等引起的问题
                 mysql_real_escape_string(mysql_, to.get(), content.c_str(), content.size());
-
                 // 核心就是操作 sql 语句
-                std:unique_ptr<char> sql(new char[content.size() * 2 + 4096]);
-                sprintf(sql.get(), "insert into blog_table values(null, '%s'， ‘%s', %d, '%s')",
-                 blog["title"].asCString(), 
-                 to.get(), 
-                 blog["tag_id"].asInt(), 
-                 blog["create_time"].asCString());
+                std::unique_ptr<char> sql(new char[content.size() * 2 + 4096]); 
+                sprintf(sql.get()
+                    , "insert into blog_table values(null, '%s', '%s', %d, '%s')"
+                    ,blog["title"].asCString() 
+                    ,to.get()
+                    ,blog["tag_id"].asInt() 
+                    ,blog["create_time"].asCString()
+                    );
 
+                 //printf("sql:%s\n",sql.get());
                 // 执行sql语句
                 int ret = mysql_query(mysql_, sql.get());
                 if (ret != 0)
@@ -77,6 +68,33 @@ namespace blog_system
                 printf("执行插入博客成功！\n");
                 return true;
             }
+// bool Insert(const Json::Value& blog) {
+//       // 对正文部分进行转义，防止出现 SQL 注入
+//       const std::string &content = blog["content"].asString();
+//       // char *to = new char[content.size() * 2 + 1];  // 文档要求 to 的长度为 from.size * 2 + 1
+//       std::unique_ptr<char> to(new char[content.size() * 2 + 1]);
+      
+//       mysql_real_escape_string(mysql_, to.get(), content.c_str(), content.size());
+
+//       std::unique_ptr<char> sql(new char[content.size() * 2 + 4096]);
+//       sprintf(sql.get()
+//           , "insert into blog_table values(null, '%s', '%s', %d, '%s')"
+//           , blog["title"].asCString()
+//           , to.get()
+//           , blog["tag_id"].asInt()
+//           , blog["create_time"].asCString()
+//       );
+
+//       int ret = mysql_query(mysql_, sql.get());
+//       if (ret != 0) {
+//         printf("insert error, %s\n", mysql_error(mysql_));
+//         return false;
+//       }
+//       printf("insert ok\n");
+
+//       return true;
+//     }
+
 
             // blogs 作为一个输出型参数
             bool SelectAll(Json::Value* blogs, const std::string& tag_id = "")
@@ -110,6 +128,7 @@ namespace blog_system
                     blog["title"] = row[1];
                     blog["tag_id"] = atoi(row[2]);
                     blog["create_time"] = row[3];
+
                     blogs->append(blog);
                 }
                 // mysql 查询的结果集合需要记得及时释放
@@ -122,7 +141,7 @@ namespace blog_system
             bool SelectOne(int32_t blog_id, Json::Value* blog)
             {
                 char sql[1024] = {0};
-                sprintf(sql. "select blog_id,title,content,tag_id,create_time from blog_table where blog_id = %d", blog_id);
+                sprintf(sql, "select blog_id,title,content,tag_id,create_time from blog_table where blog_id = %d", blog_id);
                 int ret = mysql_query(mysql_, sql);
                 if (ret != 0)
                 {
@@ -140,26 +159,28 @@ namespace blog_system
                 (*blog)["blog_id"] = atoi(row[0]);
                 (*blog)["title"] = row[1];
                 (*blog)["content"] = row[2];
-                (*blog)["tag_id"] = atoi[row[3]];
+                (*blog)["tag_id"] = atoi(row[3]);
                 (*blog)["create_time"] = row[4];
                 return true;
             }
 
             bool Update(const Json::Value& blog)
             {
-                const std::string& content = blog["content"].asCString();
+                const std::string& content = blog["content"].asString();
                 //char* to = new char[content.size() * 2 + 1];// 大小是文档的要求
                 std::unique_ptr<char> to(new char[content.size() * 2 + 1]);
                 // 进行转译，防止正文出现单引号等引起的问题
                 mysql_real_escape_string(mysql_, to.get(), content.c_str(), content.size());
                 // 核心就是操作 sql 语句
-                std:unique_ptr<char> sql(new char[content.size() * 2 + 4096]);
-                sprintf(sql.get(), "updata blog_table set title='%s', content='%s', tag_id=%d where blog_id=%d",
-                blog["title"].asCString(),
-                to.get(),
-                blog["tag_id"].asInt(),
-                blog["blog_id"].asInt());
+                std::unique_ptr<char> sql(new char[content.size() * 2 + 4096]);
+                sprintf(sql.get()
+                    ,"update blog_table set title='%s', content='%s', tag_id=%d where blog_id = %d"
+                    ,blog["title"].asCString()
+                    ,to.get()
+                    ,blog["tag_id"].asInt()
+                    ,blog["blog_id"].asInt());
 
+                printf("拼装好之后的：%s",sql.get());
                 int ret = mysql_query(mysql_, sql.get());
                 if (ret != 0)
                 {
