@@ -54,7 +54,7 @@ namespace blog_system
             bool Insert(const Json::Value& blog)
             {
                 const std::string& content = blog["content"].asCString();
-                char* to = new char[content.size() * 2 + 1];// 大小是文档的要求
+                //char* to = new char[content.size() * 2 + 1];// 大小是文档的要求
                 std::unique_ptr<char> to(new char[content.size() * 2 + 1]);
                 // 进行转译，防止正文出现单引号等引起的问题
                 mysql_real_escape_string(mysql_, to.get(), content.c_str(), content.size());
@@ -147,11 +147,40 @@ namespace blog_system
 
             bool Update(const Json::Value& blog)
             {
+                const std::string& content = blog["content"].asCString();
+                //char* to = new char[content.size() * 2 + 1];// 大小是文档的要求
+                std::unique_ptr<char> to(new char[content.size() * 2 + 1]);
+                // 进行转译，防止正文出现单引号等引起的问题
+                mysql_real_escape_string(mysql_, to.get(), content.c_str(), content.size());
+                // 核心就是操作 sql 语句
+                std:unique_ptr<char> sql(new char[content.size() * 2 + 4096]);
+                sprintf(sql.get(), "updata blog_table set title='%s', content='%s', tag_id=%d where blog_id=%d",
+                blog["title"].asCString(),
+                to.get(),
+                blog["tag_id"].asInt(),
+                blog["blog_id"].asInt());
+
+                int ret = mysql_query(mysql_, sql.get());
+                if (ret != 0)
+                {
+                    printf("更新博客失败！%s\n", mysql_error(mysql_));
+                    return false;
+                }
+                printf("更新博客成功！\n");
                 return true;
             }
 
             bool Delete(int32_t blog_id)
             {
+                char sql[1024 * 4] = {0};
+                sprintf(sql, "delete from blog_table where blog_id = %d", blog_id);
+                int ret = mysql_query(mysql_, sql);
+                if (ret != 0)
+                {
+                    printf("删除博客失败！%s\n", mysql_error(mysql_));
+                    return false;
+                }
+                printf("删除博客成功！\n");
                 return true;
             }
         private:
