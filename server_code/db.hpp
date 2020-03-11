@@ -98,10 +98,23 @@ namespace blog_system
                 {
                     printf("执行查找所有的博客失败！ %s\n",mysql_error(mysql_));
                 }
-                printf("执行查找所有的博客成功！\n");
+                //遍历结果集合，然后吧结果写到 blogs 参数中， 返回给调用者
                 MYSQL_RES* result = mysql_store_result(mysql_);
                 int rows = mysql_num_rows(result);
-                for ()
+                for (int i = 0; i < rows; ++i)
+                {
+                    MYSQL_ROW row = mysql_fetch_row(result);
+                    Json::Value blog;
+                    // row[] 中的下标和上面的 select 语句中写的列的顺序是相关联的
+                    blog["blog_id"] = atoi(row[0]);
+                    blog["title"] = row[1];
+                    blog["tag_id"] = atoi(row[2]);
+                    blog["create_time"] = row[3];
+                    blogs->append(blog);
+                }
+                // mysql 查询的结果集合需要记得及时释放
+                mysql_free_result(result);
+                printf("执行查找所有的博客成功！共查找到 %d 条博客\n", rows);
                 return true;
             }
 
