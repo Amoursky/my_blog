@@ -121,6 +121,23 @@ namespace blog_system
             //blog 同样是输出型参数，根据当前的 blog_id 在数据库中找到具体的博客内通通过blog参数返回给调用者
             bool SelectOne(int32_t blog_id, Json::Value* blog)
             {
+                char sql[1024] = {0};
+                sprintf(sql. "select blog_id,title,content,tag_id,create_time from blog_table where blog_id = %d", blog_id);
+                int ret = mysql_query(mysql_, sql);
+                if (ret != 0)
+                {
+                    printf("执行查找博客失败！%s\n", mysql_error(mysql_));
+                    return false;
+                }
+                MYSQL_RES* result = mysql_store_result(mysql_);
+                int rows = mysql_num_rows(result);
+                if (rows != 1)
+                {
+                    printf("查找到的博客不是只有一条！实际有 %d 条\n", rows);
+                    return false;
+                }
+                MYSQL_ROW row = mysql_fetch_row(result);
+                
                 return true;
             }
 
