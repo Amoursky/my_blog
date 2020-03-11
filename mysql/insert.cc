@@ -5,6 +5,8 @@
 // 编译器默认从 /usr/include 目录中查找头文件
 #include <mysql/mysql.h>
 
+#include <jsoncpp/json/json.h>
+
 int main()
 {
     // 1.创建一个数据库的连接句柄
@@ -36,12 +38,23 @@ int main()
     char content[] = "我要拿30W年薪";
     int tag_id = 1;
     char date[] = "2019/08/09";
+    // Json::Value blog;
+    // blog["title"] = "立一个flag";
+    // blog["content"] = "我要拿30W年薪";
+    // blog["tag_id"] = 1;
+    // blog["create_time"] = "2019/09/09";
     sprintf(sql, "insert into blog_table values(null, '%s', '%s', %d, '%s')",
     title, content, tag_id, date);
+    // sprintf(sql, "insert into blog_table values(null, '%s', ‘%s', %d, '%s')",
+    //              blog["title"].asCString(), 
+    //              //to.get(),
+    //              blog["content"].asCString(), 
+    //              blog["tag_id"].asInt(), 
+    //              blog["create_time"].asCString());
     printf("sql: %s\n",sql);
     // 5. 让数据库服务器执行 SQL
     int ret = mysql_query(connect_fd, sql);
-    if (ret < 0)
+    if (ret != 0)
     {
         printf("执行 sql 失败！%s\n", mysql_error(connect_fd));
         mysql_close(connect_fd);
