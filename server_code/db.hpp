@@ -137,7 +137,11 @@ namespace blog_system
                     return false;
                 }
                 MYSQL_ROW row = mysql_fetch_row(result);
-                
+                (*blog)["blog_id"] = atoi(row[0]);
+                (*blog)["title"] = row[1];
+                (*blog)["content"] = row[2];
+                (*blog)["tag_id"] = atoi[row[3]];
+                (*blog)["create_time"] = row[4];
                 return true;
             }
 
