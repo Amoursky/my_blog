@@ -67,7 +67,7 @@ int main()
             resp.set_content(writer.write(resp_json), "application/json");
             return;                        
         }
-        
+
         // 4.构造一个正确的响应给客户端即可
         printf("博客插入成功!\n");
         resp_json["ok"] = true;
@@ -84,7 +84,9 @@ int main()
     //查看某个博客
     server.Get(R"(/blog/(\d+))",[](const Request& req, Response& resp)
     {
-
+        printf("查看所有博客！\n");
+        // 1.尝试获取 tag_id,如果 tag_id 这个参数不存在，返回空字符串
+        const std::string& tag_id = req.get_param_value("tag_id");
     });
 
     // 修改某个博客
