@@ -10,5 +10,5 @@ blog_server:blog_server.cc
 	g++ blog_server.cc -o blog_server $(FLAG)
 
 .PHONY:clean
-clean:
+clean: 
 	rm db_test blog_server
