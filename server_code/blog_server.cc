@@ -19,9 +19,60 @@ int main()
     // 3. 创建服务器，并设置“路由”
     Server server;
     // 新增博客
-    server.Post("/blog", [](const Request& req, Response& resp)
+    server.Post("/blog", [&blog_table](const Request& req, Response& resp)
     {
+        printf("新增博客!\n");
+        // 1.获取到请求中 body 并解析成 json
+        Json::Reader reader;
+        Json::FastWriter writer;
+        Json::Value req_json;
+        Json::Value resp_json;
+        bool ret = reader.parse(req.body, req_json);
+        if(!ret)
+        {
+            // 解析出错，给用户提示
+            printf("解析请求失败！%s\n", req.body.c_str());
+            // 构造一个响应对象，告诉客户端出错了
+            resp_json["ok"] = false;
+            resp_json["reason"] = "input data parse failed!";
+            resp.status = 400;
+            resp.set_content(writer.write(resp_json), "application/json");
+            return;
+        }
 
+        // 2.对参数进行校验
+        if (req_json["title"].empty()
+            || req_json["content"].empty()
+            || req_json["tag_id"].empty()
+            || req_json["create_time"].empty())
+        {
+            // 解析出错，给用户提示
+            printf("解析请求失败！%s\n", req.body.c_str());
+            // 构造一个响应对象，告诉客户端出错了
+            resp_json["ok"] = false;
+            resp_json["reason"] = "input data format error!";
+            resp.status = 400;
+            resp.set_content(writer.write(resp_json), "application/json");
+            return;
+        }
+
+        // 3.真正的调用 MySQL 借口来操作
+        ret = blog_table.Insert(req_json);
+        if (!ret)
+        {
+            printf("博客插入失败!\n");
+            resp_json["ok"] = false;
+            resp_json["reason"] = "blog insert error!";
+            resp.status = 500;
+            resp.set_content(writer.write(resp_json), "application/json");
+            return;                        
+        }
+        
+        // 4.构造一个正确的响应给客户端即可
+        printf("博客插入成功!\n");
+        resp_json["ok"] = true;
+        resp.set_content(writer.write(resp_json), "application/json");
+        return;
     });
 
     // 查看所有的博客列表
