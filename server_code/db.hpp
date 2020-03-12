@@ -69,7 +69,7 @@ namespace blog_system
             }
 
             // blogs 作为一个输出型参数
-            bool SelectAll(Json::Value* blogs, const std::string& tag_id = "")
+            bool SelectAll(Json::Value* blogs, const std::string& tag_id = "")   
             {
                 char sql[1024 * 4] = {0};
                 if (tag_id == "")
