@@ -30,7 +30,7 @@
 <!-- nav end -->
 
 <!-- content srart -->
-<div class="am-g am-g-fixed blog-fixed" id = "app">
+<div class="am-g am-g-fixed blog-fixed" id = "app" v-for="blog in blogs">
     <div class="am-u-md-8 am-u-sm-12">
 
         <article class="am-g blog-entry-article">
@@ -112,7 +112,26 @@
             // data 表示所有需要在页面上动态变化的数据
             // 把 js 中的数据和界面上的数据关联在一起，数据绑定的过程
             author:'赵凡',
-            blogs:
+            blogs:[
+                {
+                    title:"第一篇博客",
+                    tag_id:1,
+                    create_time:"2020/02/01"
+                },
+                {
+                    title:"第二篇博客",
+                    tag_id:1,
+                    create_time:"2020/02/02"
+                },
+                {
+                    title:"第三篇博客",
+                    tag_id:1,
+                    create_time:"2020/02/03"
+                }                
+            ],
+            tags:[
+                
+            ]
         }
     });
 </script>
