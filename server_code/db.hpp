@@ -137,7 +137,7 @@ namespace blog_system
                 return true;
             }
 
-            bool Update(const Json::Value& blog)
+            bool Update(Json::Value& blog)
             {
                 const std::string& content = blog["content"].asString();
                 //char* to = new char[content.size() * 2 + 1];// 大小是文档的要求
