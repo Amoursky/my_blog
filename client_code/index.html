@@ -28,17 +28,15 @@
 <button class="am-topbar-btn am-topbar-toggle am-btn am-btn-sm am-btn-success am-show-sm-only blog-button" data-am-collapse="{target: '#blog-collapse'}" ><span class="am-sr-only">导航切换</span> <span class="am-icon-bars"></span></button>
 </nav>
 <!-- nav end -->
-<!-- banner start -->
-<!-- banner end -->
 
 <!-- content srart -->
-<div class="am-g am-g-fixed blog-fixed">
+<div class="am-g am-g-fixed blog-fixed" id = "app">
     <div class="am-u-md-8 am-u-sm-12">
 
         <article class="am-g blog-entry-article">
             <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
                 <span><a href="" class="blog-color">article &nbsp;</a></span>
-                <span> @amazeUI &nbsp;</span>
+                <span> @Amoursky &nbsp;</span>
                 <span>2015/10/9</span>
                 <h1><a href="">我本楚狂人，凤歌笑孔丘</a></h1>
                 <p>我们一直在坚持着，不是为了改变这个世界，而是希望不被这个世界所改变。
@@ -52,9 +50,10 @@
         <div class="blog-sidebar-widget blog-bor">
             <h2 class="blog-text-center blog-title"><span>About ME</span></h2>
             <img src="assets/i/f14.jpg" alt="about me" class="blog-entry-img" >
-            <p>Amoursky</p>
+            <!--插值表达式-->
+            <p>{{author}}</p>
             <p>
-        我是Amoursky，一个想成为大佬的小菜鸡。。。
+        我是{{author}}，一个想成为大佬的小菜鸡。。。
         </p><p>万事开头难，但更难的是坚持下去！</p>
         </div>
         <div class="blog-sidebar-widget blog-bor">
@@ -105,5 +104,17 @@
 <script src="assets/js/amazeui.ie8polyfill.min.js"></script>
 <![endif]-->
 <script src="assets/js/amazeui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script>
+    var app = new Vue({
+        el: '#app', //el表示 app 这个 Vue 和哪个 HTML 元素关联上。
+        data:{
+            // data 表示所有需要在页面上动态变化的数据
+            // 把 js 中的数据和界面上的数据关联在一起，数据绑定的过程
+            author:'赵凡',
+            blogs:
+        }
+    });
+</script>
 </body>
 </html>
