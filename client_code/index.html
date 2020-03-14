@@ -30,20 +30,19 @@
 <!-- nav end -->
 
 <!-- content srart -->
-<div class="am-g am-g-fixed blog-fixed" id = "app" v-for="blog in blogs">
+<div class="am-g am-g-fixed blog-fixed" id = "app">
     <div class="am-u-md-8 am-u-sm-12">
 
-        <article class="am-g blog-entry-article">
+        <article class="am-g blog-entry-article" v-for="blog in blogs">
             <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
-                <span><a href="" class="blog-color">article &nbsp;</a></span>
-                <span> @Amoursky &nbsp;</span>
-                <span>2015/10/9</span>
-                <h1><a href="">我本楚狂人，凤歌笑孔丘</a></h1>
-                <p>我们一直在坚持着，不是为了改变这个世界，而是希望不被这个世界所改变。
-                </p>
+                <span><a href="" class="blog-color">{{blog.tag_id}} &nbsp;</a></span>
+                <span> @{{author}} &nbsp;</span>
+                <span>{{blog.create_time}}</span>
+                <h1><a href="">{{blog.title}}</a></h1>
                 <p><a href="" class="blog-continue">continue reading</a></p>
             </div>
         </article>
+
     </div>
 
     <div class="am-u-md-4 am-u-sm-12 blog-sidebar">
@@ -69,16 +68,15 @@
         <div class="blog-clear-margin blog-sidebar-widget blog-bor am-g ">
             <h2 class="blog-title"><span>TAG cloud</span></h2>
             <div class="am-u-sm-12 blog-clear-padding">
-            <a href="" class="blog-tag">C语言</a>
+            <a href="" class="blog-tag" v-for="tag in tags">{{tag.tag_name}}</a>
             </div>
         </div>
         <div class="blog-sidebar-widget blog-bor">
             <h2 class="blog-title"><span>摘抄</span></h2>
             <ul class="am-list">
                 <li><a href="#">难能可贵的是坚持。</a></li>
-                <li><a href="#">我把最深沉的秘密放在那里。</a></li>
-                <li><a href="#">你不懂我，我不怪你。</a></li>
-                <li><a href="#">每个人都有一道伤口， 或深或浅，盖上布，以为不存在。</a></li>
+                <li><a href="#">闲有余日，正可学问。</a></li>
+                <li><a href="#">我们都在阴沟里，但仍有人仰望星空。</a></li>
             </ul>
         </div>
     </div>
@@ -106,6 +104,7 @@
 <script src="assets/js/amazeui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 <script>
+    
     var app = new Vue({
         el: '#app', //el表示 app 这个 Vue 和哪个 HTML 元素关联上。
         data:{
@@ -120,18 +119,33 @@
                 },
                 {
                     title:"第二篇博客",
-                    tag_id:1,
+                    tag_id:2,
                     create_time:"2020/02/02"
                 },
                 {
                     title:"第三篇博客",
-                    tag_id:1,
+                    tag_id:3,
                     create_time:"2020/02/03"
                 }                
             ],
             tags:[
-                
+                {
+                    tag_id:1,
+                    tag_name:"C语言"
+                },
+                {
+                    tag_id:2,
+                    tag_name:"C++"
+                }
             ]
+        },
+        methods:{
+            tag_id2name(tag_id){
+                //
+                for (var index in this.tags){
+
+                }
+            }
         }
     });
 </script>
