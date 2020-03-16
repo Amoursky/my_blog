@@ -140,10 +140,14 @@
         },
         methods:{
             tag_id2name(tag_id){
-                //
+                // this访问当前的 app 对象
+                // this.tags就相当于上面定义的标签数组
                 for (var index in this.tags){
-
+                    if(this.tags[index].tag_id == tag_id){
+                        return this.tags[index].tag_name;
+                    }
                 }
+                return "默认分类";
             }
         }
     });
