@@ -35,7 +35,7 @@
 
         <article class="am-g blog-entry-article" v-for="blog in blogs">
             <div class="am-u-lg-6 am-u-md-12 am-u-sm-12 blog-entry-text">
-                <span><a href="" class="blog-color">{{blog.tag_id}} &nbsp;</a></span>
+                <span><a href="" class="blog-color">{{tag_id2name(blog.tag_id)}} &nbsp;</a></span>
                 <span> @{{author}} &nbsp;</span>
                 <span>{{blog.create_time}}</span>
                 <h1><a href="">{{blog.title}}</a></h1>
@@ -109,7 +109,7 @@
         data:{
             // data 表示所有需要在页面上动态变化的数据
             // 把 js 中的数据和界面上的数据关联在一起，数据绑定的过程
-            author:'赵凡',
+            author:'Amoursky',
             blogs:[
                 {
                     title:"第一篇博客",
@@ -148,6 +148,9 @@
                     }
                 }
                 return "默认分类";
+            },
+            get_blogs(tad_id){
+                var url = '/blog'
             }
         }
     });
