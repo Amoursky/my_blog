@@ -150,10 +150,34 @@
                 return "默认分类";
             },
             get_blogs(tad_id){
-                var url = '/blog'
-            }
-        }
+                var url = '/blog';
+                if(tag_id != null){
+                    url = '/blog/?tag_id=' + tag_id;
+                }
+                // 最核心操作，访问 http 服务器的数据
+                // ajax 原生 api 特别难用， Vue 提供了 API，环境配置特别难
+                // 此处我们使用 JQuery 提供的 API
+                $.ajax({
+                    url: url,
+                    type: "get",
+                    context: this, // 此处的 this 就表示 Vue 对象
+                    success: function(data, status){
+                        // data 表示响应的 body 数据
+                        // status 表示响应的状态码
+                        // HTTP 请求执行成功之后要执行这个代码
+                        // 在代码中更新数据。
+                        // 如果不设置 context, 此时直接使用 this.blogs 是会出错的
+                        // 因为此时的 this 表示当前 $ 这样的 jquery 对象
+                        // 而不是 Vue 对象
+                        // 加上 context 之后,this 就表示 context 中的值
+                        this.blogs = data;
+                    }
+                })
+            } 
+        },
     });
+    // 初始化的获取数据操作
+app.get_blogs();
 </script>
 </body>
 </html>
