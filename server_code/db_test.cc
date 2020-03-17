@@ -28,16 +28,17 @@ void TestBlogTable()
     // printf("select one %d\n", ret);
     // printf("blog: %s\n", writer.write(blog).c_str());
 
-    // 修改博客
-    // blog["blog_id"] = 4;
-    // blog["title"] = "第一篇 C 语言博客";
-    // blog["content"] = "1. 变量和类型\n什么是变量？创建一个‘变量’就相当于创建一块内存空间";
-    // ret = blog_table.Update(blog);
-    // printf("update %d\n", ret);
+    //修改博客
+    blog["blog_id"] = 5;
+    blog["title"] = "第一篇 C 语言博客";
+    blog["content"] = "1. 变量和类型\n什么是变量？创建一个‘变量’就相当于创建一块内存空间";
+    blog["create_time"] = "200/10/10";
+    ret = blog_table.Update(blog);
+    printf("update %d\n", ret);
 
     // 删除博客
-    ret = blog_table.Delete(4);
-    printf("delete %d", ret);
+    // ret = blog_table.Delete(4);
+    // printf("delete %d", ret);
 
     blog_system::MySQLRelease(mysql);
 }
@@ -68,7 +69,7 @@ void TestTagTable()
 
 int main()
 {
-    //TestBlogTable();
-    TestTagTable();
+    TestBlogTable();
+    //TestTagTable();
     return 0;
 }

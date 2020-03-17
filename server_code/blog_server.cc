@@ -142,7 +142,8 @@ int main()
         //3. 校验参数是否符合预期
         if (req_json["title"].empty()
             || req_json["content"].empty()
-            || req_json["tag_id"].empty())
+            || req_json["tag_id"].empty()
+            || req_json["create_time"].empty())
         {
             resp_json["ok"] = false;
             resp_json["reason"] = "update blog request format error";

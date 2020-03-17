@@ -9,9 +9,7 @@
   <title>Amoursky的个人博客</title>
   <meta name="renderer" content="webkit">
   <meta http-equiv="Cache-Control" content="no-siteapp"/>
-  <link rel="icon" type="image/png" href="assets/i/favicon.png">
   <meta name="mobile-web-app-capable" content="yes">
-  <link rel="icon" sizes="192x192" href="assets/i/app-icon72x72@2x.png">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
   <meta name="apple-mobile-web-app-title" content="Amaze UI"/>
@@ -54,6 +52,14 @@
                 <label for="doc-ipt-email-1">标题</label>
                 <input type="text" class="" v-model="blog.title">
            </div>
+           <div class="am-form-group">
+                <label for="doc-ipt-email-1">类别</label>
+                <input type="text" class="" v-model="blog.tag_id">
+            </div>
+            <div class="am-form-group">
+                <label for="doc-ipt-email-1">时间</label>
+                <input type="text" class="" v-model="blog.create_time">
+            </div>
         </div>
 
         <article id="blog_view">
@@ -89,6 +95,7 @@
             <h2 class="blog-title"><span>TAG cloud</span></h2>
             <div class="am-u-sm-12 blog-clear-padding" v-cloak>
             <a href="" class="blog-tag" v-for="tag in tags">{{tag.tag_name}}</a>
+            <button type="button" class="am-btn am-btn-success am-btn-xs" v-cloak v-on:click="insert_tag()">+</button>
             </div>
         </div>
         <div class="blog-sidebar-widget blog-bor">
@@ -147,6 +154,10 @@ var app = new Vue({
             content: null,
             create_time: null,
             tag_id: null,
+        },
+        tag:{
+            tag_id: null,
+            tag_name: null,
         }
     },
     methods:{
@@ -234,6 +245,7 @@ var app = new Vue({
                 success: function(data, status){
                     this.get_blogs();
                     alert("删除成功!");
+                    this.back();
                 }
             })
         },
@@ -265,7 +277,8 @@ var app = new Vue({
             var body = {
                 title: this.blog.title,
                 content: content,
-                tag_id: this.blog.tag_id
+                tag_id: this.blog.tag_id,
+                create_time: this.blog.create_time,
             }
             $.ajax({
                 type: "put",
@@ -279,7 +292,23 @@ var app = new Vue({
                     this.back();
                 }
             })
-        }
+        },
+        insert_blog(){
+            // 1. 先把之前的博客内容清空
+            // var body = {
+            //     title: "新增博客",
+            //     content: "新增正文",
+            //     create_time:"2020/03/05",
+            //     tag_id: 50
+            // }
+            // 2.ajax 获取当前博客的内容
+            testEditor = editormd("blog_view", {
+                width   : "100%",
+                height  : "700px",
+                syncScrolling : "single",
+                path    : "editor.md/lib/"
+            });       
+        },
     },
 });
 // 初始化的获取数据操作

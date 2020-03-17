@@ -146,10 +146,11 @@ namespace blog_system
                 mysql_real_escape_string(mysql_, to.get(), content.c_str(), content.size());
                 std::unique_ptr<char> sql(new char[content.size() * 2 + 4096]);
                 sprintf(sql.get()
-                    ,"update blog_table set title='%s', content='%s', tag_id=%d where blog_id = %d"
+                    ,"update blog_table set title='%s', content='%s', tag_id=%d, create_time='%s' where blog_id = %d"
                     ,blog["title"].asCString()
                     ,to.get()
                     ,blog["tag_id"].asInt()
+                    ,blog["create_time"].asCString()
                     ,blog["blog_id"].asInt());
 
                 int ret = mysql_query(mysql_, sql.get());
