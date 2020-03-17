@@ -44,6 +44,7 @@
                 <h1><a v-on:click="edit_blog(blog.blog_id)">{{blog.title}}</a></h1>
                 <button type="button" class="am-btn am-btn-danger am-round" v-on:click="delete_blog(blog.blog_id)">删除博客</button>              
                 <p><a href="" class="blog-continue">continue reading</a></p>
+                <button type="button" class="am-btn am-btn-warning am-round" v-on:click="insert_blog()">提交</button>
             </div>
         </article>
     </div>
