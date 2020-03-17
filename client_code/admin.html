@@ -41,12 +41,11 @@
                 <span> @{{author}} &nbsp;</span>
                 <span>{{blog.create_time}}</span>
                 <!-- v-on :click 把当前的html 标签关联上一个鼠标点击事件-->
-                <h1><a v-on:click="edit_blog(blog.blog_id)">{{blog.title}}</a></h1>
-                <button type="button" class="am-btn am-btn-danger am-round" v-on:click="delete_blog(blog.blog_id)">删除博客</button>              
+                <h1><a v-on:click="edit_blog(blog.blog_id)">{{blog.title}}</a></h1>              
                 <p><a href="" class="blog-continue">continue reading</a></p>
-                <button type="button" class="am-btn am-btn-success am-round" v-on:click="insert_blog()">+</button>
             </div>
         </article>
+        <button type="button" class="am-btn am-btn-success am-round am-btn-block" v-cloak v-on:click="insert_blog()">+</button>
     </div>
 
     <div class="am-u-md-12 am-u-sm-12" v-show="blog.blog_id != null" v-cloak>
@@ -61,6 +60,7 @@
             <!--博客详情-->
             <textarea>{{blog.content}}</textarea>
         </article>
+        <button type="button" class="am-btn am-btn-danger am-round" v-on:click="delete_blog(blog.blog_id)">删除</button>
         <button type="button" class="am-btn am-btn-warning am-round" v-on:click="update_blog(blog.blog_id)">提交</button>
         <button type="button" class="am-btn am-btn-warning am-round" v-on:click="back()">返回</button>
     </div>
