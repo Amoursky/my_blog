@@ -51,7 +51,7 @@
     <div class="am-u-md-12 am-u-sm-12" v-show="blog.blog_id != null" v-cloak>
         <div class="am-form-group">
             <label for="doc-ipt-email-1">标题</label>
-            <input type="email" class="" id="doc-ipt-email-1" placeholder="输入新的标题">
+            <input type="text" class="" v-model="blog.title">
           </div>
         <article id="blog_view">
             <!--博客详情-->
