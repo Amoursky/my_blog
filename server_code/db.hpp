@@ -240,5 +240,4 @@ namespace blog_system
         private:
             MYSQL* mysql_;
     };
-    
-} //  end blog_system
+} // end blog_system
