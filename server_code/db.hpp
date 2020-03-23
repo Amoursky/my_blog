@@ -241,4 +241,4 @@ namespace blog_system
             MYSQL* mysql_;
     };
     
-} // end blog_system
+}  // end blog_system
